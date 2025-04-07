@@ -1,4 +1,5 @@
-from sqlalchemy import ARRAY, Boolean, Column, Date, String
+from sqlalchemy import Boolean, Column, Date, String
+from sqlalchemy.dialects.postgresql import ARRAY
 from litestar.dto import DTOConfig
 from litestar.contrib.sqlalchemy.dto import SQLAlchemyDTO
 

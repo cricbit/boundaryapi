@@ -7,5 +7,6 @@ from app.db.database import sqlalchemy_config
 
 app = Litestar(
     route_handlers=[api_router],
-    plugins=[SQLAlchemyInitPlugin(config=sqlalchemy_config)]
+    plugins=[SQLAlchemyInitPlugin(config=sqlalchemy_config)],
+    debug=True
 )
