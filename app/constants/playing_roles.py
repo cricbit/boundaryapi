@@ -1,6 +1,6 @@
 from enum import Enum
 
-class PlayingRoles(Enum):
+class PlayingRoles(str, Enum):
     BATTER = "Batter"
     OPENING_BATTER = "Opening batter"
     TOP_ORDER_BATTER = "Top-order batter"

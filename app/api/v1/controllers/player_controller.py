@@ -24,7 +24,6 @@ class PlayerController(Controller):
         name: str | None = Parameter(query="name", default=None),
         role: PlayingRoles | None = Parameter(query="role", default=None),
         national_team: str | None = Parameter(query="national_team", default=None),
-        is_active: bool | None = Parameter(query="is_active", default=None),
         batting_style: BattingStyles | None = Parameter(query="batting_style", default=None),
         bowling_style: BowlingStyles | None = Parameter(query="bowling_style", default=None),
     ) -> list[Player]:
@@ -33,9 +32,8 @@ class PlayerController(Controller):
                 name=name,
                 role=role,
                 national_team=national_team,
-                is_active=is_active,
                 batting_style=batting_style,
-                bowling_style=bowling_style.value if bowling_style else None
+                bowling_style=bowling_style
             )
             return players
         except Exception as e:

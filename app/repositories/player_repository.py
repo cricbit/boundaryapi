@@ -15,7 +15,6 @@ class PlayerRepository(SQLAlchemyAsyncRepository[Player]):
         name: str | None = None,
         role: PlayingRoles | None = None,
         national_team: str | None = None,
-        is_active: bool | None = None,
         batting_style: BattingStyles | None = None,
         bowling_style: BowlingStyles | None = None,
     ) -> list[Player]:
@@ -28,8 +27,6 @@ class PlayerRepository(SQLAlchemyAsyncRepository[Player]):
             conditions.append(Player.playing_role == role.value)
         if national_team:
             conditions.append(Player.national_team == national_team)
-        if is_active is not None:
-            conditions.append(Player.is_active == is_active)
         if batting_style:
             conditions.append(Player.batting_styles.contains([batting_style.value]))
         if bowling_style:
