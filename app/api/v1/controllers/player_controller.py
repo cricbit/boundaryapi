@@ -23,3 +23,11 @@ class PlayerController(Controller):
                 status_code=500,
                 detail=f"Failed to fetch players: {str(e)}"
             )
+        
+    @get("/{player_id:str}")
+    async def get_player(self, player_id: str, player_repository: PlayerRepository) -> Player:
+        try:
+            player = await player_repository.get(player_id)
+            return player
+        except Exception:
+            raise HTTPException(status_code=404, detail=f"Player not found: {player_id}")
