@@ -74,6 +74,11 @@ GET /v1/series/456/stats
 - SQLAlchemy integration for database operations
 - Type-safe API endpoints with proper validation
 
+## Data Sources
+
+- [Cricsheet](cricsheet.org)
+- [ESPNCricinfo](espncricinfo.com)
+
 ## Contributing
 
 We welcome contributions to the Boundary API! Here are some guidelines to help you get started:
