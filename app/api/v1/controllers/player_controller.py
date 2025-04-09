@@ -6,7 +6,7 @@ from litestar.params import Parameter
 from app.constants.playing_roles import PlayingRoles, BattingStyles
 from app.constants.bowling_styles import BowlingStyles
 
-from app.models.player import Player, PlayerDTO
+from app.models.player import PlayerResponse, PlayerDTO
 from app.repositories.player_repository import PlayerRepository, provide_player_repository
 
 class PlayerController(Controller):
@@ -26,16 +26,16 @@ class PlayerController(Controller):
         national_team: str | None = Parameter(query="national_team", default=None),
         batting_style: BattingStyles | None = Parameter(query="batting_style", default=None),
         bowling_style: BowlingStyles | None = Parameter(query="bowling_style", default=None),
-    ) -> list[Player]:
+    ) -> list[PlayerResponse]:
         try:
-            players = await player_repository.list(
+            players = await player_repository.list_players(
                 name=name,
                 role=role,
                 national_team=national_team,
                 batting_style=batting_style,
                 bowling_style=bowling_style
             )
-            return players
+            return [PlayerResponse(**player.to_dict()) for player in players]
         except Exception as e:
             raise HTTPException(
                 status_code=500,
@@ -43,9 +43,10 @@ class PlayerController(Controller):
             )
         
     @get("/{player_id:str}")
-    async def get_player_by_id(self, player_id: str, player_repository: PlayerRepository) -> Player:
+    async def get_player_by_id(self, player_id: str, player_repository: PlayerRepository) -> PlayerResponse:
         try:
             player = await player_repository.get(player_id)
-            return player
+            teams = await player_repository.get_player_teams(player_id)
+            return PlayerResponse(**player.to_dict(), teams=teams)
         except Exception:
             raise HTTPException(status_code=404, detail=f"Player not found: {player_id}")

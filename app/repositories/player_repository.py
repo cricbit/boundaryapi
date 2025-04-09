@@ -4,13 +4,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.constants.playing_roles import PlayingRoles, BattingStyles
 from app.constants.bowling_styles import BowlingStyles
-from app.models.player import Player
+from app.models.player import Player, PlayingXI
 
 class PlayerRepository(SQLAlchemyAsyncRepository[Player]):
     model_type = Player
     id_attribute = "player_id"
 
-    async def list(
+    async def list_players(
         self,
         name: str | None = None,
         role: PlayingRoles | None = None,
@@ -35,6 +35,11 @@ class PlayerRepository(SQLAlchemyAsyncRepository[Player]):
         if conditions:
             query = query.where(and_(*conditions))
 
+        result = await self.session.execute(query)
+        return list(result.scalars().all())
+    
+    async def get_player_teams(self, player_id: str) -> list[str]:
+        query = select(PlayingXI.team).where(PlayingXI.player_id == player_id).group_by(PlayingXI.team)
         result = await self.session.execute(query)
         return list(result.scalars().all())
 

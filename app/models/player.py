@@ -1,7 +1,9 @@
 from sqlalchemy import Boolean, Column, Date, String
 from sqlalchemy.dialects.postgresql import ARRAY
-from litestar.dto import DTOConfig
-from litestar.contrib.sqlalchemy.dto import SQLAlchemyDTO
+from datetime import date
+from litestar.dto import DataclassDTO
+from pydantic.dataclasses import dataclass
+from typing import Optional
 
 from app.models.base import Base
 
@@ -11,7 +13,7 @@ class Player(Base):
 
     player_id = Column(String, primary_key=True)
     name = Column(String, nullable=False)
-    dob = Column(Date)
+    dob = Column(Date, nullable=True)
     gender = Column(String)
     batting_styles = Column(ARRAY(String))
     bowling_styles = Column(ARRAY(String))
@@ -34,6 +36,26 @@ class Player(Base):
             "is_active": self.is_active
         }
 
+class PlayingXI(Base):
+    __tablename__ = "playing_xi"
 
-class PlayerDTO(SQLAlchemyDTO[Player]):
-    config = DTOConfig()
+    match_id = Column(String, nullable=False, primary_key=True)
+    player_id = Column(String, nullable=False, primary_key=True)
+    team = Column(String, nullable=False)
+    opponent = Column(String, nullable=False)
+
+@dataclass
+class PlayerResponse:
+    player_id: str
+    name: str
+    dob: date | None
+    gender: str
+    batting_styles: list[str]
+    bowling_styles: list[str]
+    image_url: str
+    national_team: str
+    playing_role: str
+    is_active: bool
+    teams: Optional[list[str]] = None
+
+PlayerDTO = DataclassDTO[PlayerResponse]
