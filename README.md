@@ -28,12 +28,6 @@ GET /v1/players?name=smith&role=batsman&national_team=australia
 
 `GET /v1/players/{player_id}`
 
-Example:
-
-```
-GET /v1/players/123
-```
-
 ### Series
 
 #### List All Series
@@ -76,8 +70,8 @@ GET /v1/series/456/stats
 
 ## Data Sources
 
-- [Cricsheet](cricsheet.org)
-- [ESPNCricinfo](espncricinfo.com)
+- [Cricsheet](https://cricsheet.org)
+- [ESPNCricinfo](https://espncricinfo.com)
 
 ## Contributing
 
