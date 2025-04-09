@@ -12,20 +12,22 @@ from app.repositories.player_repository import PlayerRepository, provide_player_
 class PlayerController(Controller):
     path = "/players"
     dto = PlayerDTO
+    tags = ["Players"]
+    description = "Operations related to cricket players"
 
     dependencies = {
         "player_repository": Provide(provide_player_repository)
     }
 
-    @get("/")
+    @get("/", description="List all players with optional filtering")
     async def list_players(
         self,
         player_repository: PlayerRepository,
-        name: str | None = Parameter(query="name", default=None),
-        role: PlayingRoles | None = Parameter(query="role", default=None),
-        national_team: str | None = Parameter(query="national_team", default=None),
-        batting_style: BattingStyles | None = Parameter(query="batting_style", default=None),
-        bowling_style: BowlingStyles | None = Parameter(query="bowling_style", default=None),
+        name: str | None = Parameter(query="name", default=None, description="Filter by player name"),
+        role: PlayingRoles | None = Parameter(query="role", default=None, description="Filter by playing role"),
+        national_team: str | None = Parameter(query="national_team", default=None, description="Filter by national team"),
+        batting_style: BattingStyles | None = Parameter(query="batting_style", default=None, description="Filter by batting style"),
+        bowling_style: BowlingStyles | None = Parameter(query="bowling_style", default=None, description="Filter by bowling style"),
     ) -> list[PlayerResponse]:
         try:
             players = await player_repository.list_players(
@@ -42,7 +44,7 @@ class PlayerController(Controller):
                 detail=f"Failed to fetch players: {str(e)}"
             )
         
-    @get("/{player_id:str}")
+    @get("/{player_id:str}", description="Get detailed information about a specific player")
     async def get_player_by_id(self, player_id: str, player_repository: PlayerRepository) -> PlayerResponse:
         try:
             player = await player_repository.get(player_id)
