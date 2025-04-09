@@ -42,6 +42,11 @@ class PlayerRepository(SQLAlchemyAsyncRepository[Player]):
         query = select(PlayingXI.team).where(PlayingXI.player_id == player_id).group_by(PlayingXI.team)
         result = await self.session.execute(query)
         return list(result.scalars().all())
+    
+    async def get_player_name(self, player_id: str) -> str:
+        query = select(Player.name).where(Player.player_id == player_id)
+        result = await self.session.execute(query)
+        return result.scalars().one()
 
 async def provide_player_repository(db_session: AsyncSession) -> PlayerRepository:
     return PlayerRepository(session=db_session)
